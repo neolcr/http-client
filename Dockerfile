@@ -45,7 +45,17 @@ RUN chsh -s /usr/bin/zsh
 RUN echo 'eval "$(starship init zsh)"' >> /root/.zshrc
 
 RUN mkdir -p /root/.config/nvim/lua/config && \
-    printf 'vim.keymap.set("i", "jj", "<Esc>")\n' >> /root/.config/nvim/lua/config/keymaps.lua
+cat >> /root/.config/nvim/lua/config/keymaps.lua <<'EOF'
+vim.keymap.set("i", "jj", "<Esc>")
+
+vim.keymap.set({ "n", "t" }, "tt", function()
+  Snacks.terminal("bash", {
+    win = {
+      style = "terminal",
+    },
+  })
+end, { desc = "Terminal flotante" })
+EOF
 
 WORKDIR /projects
 
