@@ -1,7 +1,8 @@
 use crate::http::client::caller;
 use crate::http::model::Invocation;
+use crate::model::productagreement::model::Response;
 
-pub fn by_invparty(involved_party: &str) -> Result<String, Box<dyn std::error::Error>> {
+pub fn by_invparty(involved_party: &str) -> reqwest::Result<Response> {
     let mut invocation: Invocation<()> = Invocation::default();
     invocation.value = Some(String::from(involved_party));
     invocation.method = Some("GET");
@@ -14,7 +15,5 @@ pub fn by_invparty(involved_party: &str) -> Result<String, Box<dyn std::error::E
         invocation.value.as_ref().unwrap(),
         "&productAgreementStatus=ALL&agreementInvolvedPartyRelationshipStatus=ALL"
     ));
-    return caller::<Invocation<()>, ()>(invocation)
-        .map(|res| format!("{:?}", res))
-        .map_err(|e| Box::new(e) as Box<dyn std::error::Error>);
+    return caller(invocation);
 }

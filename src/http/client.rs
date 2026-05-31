@@ -12,18 +12,17 @@ pub fn saludar() {
 }
 
 #[allow(unused)]
-pub fn caller<T, I>(invocation: Invocation<I>) -> reqwest::Result<Box<dyn std::fmt::Debug>> {
+pub fn caller<I>(invocation: Invocation<I>) -> reqwest::Result<Response> {
     let method = invocation.method.as_deref().unwrap_or("GET");
-    let response = match method {
-        "GET" => get::<T, _>(invocation),
-        "POST" => post::<T, _>(invocation),
-        _ => get::<T, _>(invocation),
-    };
-    Ok(Box::new(response))
+    match method {
+        "GET" => get(invocation),
+        "POST" => post(invocation),
+        _ => get(invocation),
+    }
 }
 
 #[allow(unused)]
-fn get<T, I>(invocation: Invocation<I>) -> reqwest::Result<Box<dyn std::fmt::Debug>> {
+fn get<I>(invocation: Invocation<I>) -> reqwest::Result<Response> {
     let url = invocation.url.as_ref().unwrap().trim();
     log::info!("Llamar a url {}", &url);
     let client = ClientBuilder::new()
@@ -75,17 +74,10 @@ fn get<T, I>(invocation: Invocation<I>) -> reqwest::Result<Box<dyn std::fmt::Deb
         }
     };
 
-    Ok(Box::new(final_response))
+    Ok(final_response)
 }
 
 #[allow(unused)]
-fn post<T, I>(invocation: Invocation<I>) -> reqwest::Result<Box<dyn std::fmt::Debug>> {
-    // let trim_value = invocation.value.trim();
-    // let method = invocation.method;
-
-    let paroot = productagreement::model::Identifier {
-        kind: "algo".to_string(),
-        value: "algo".to_string(),
-    };
-    Ok(Box::new(paroot))
+fn post<I>(invocation: Invocation<I>) -> reqwest::Result<Response> {
+    Ok(Response::Unknown())
 }

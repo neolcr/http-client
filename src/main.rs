@@ -11,9 +11,13 @@ use std::fmt::format;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+use crate::model::productagreement::model::Response;
+use crate::output::model::Output;
 mod api;
 mod http;
 mod model;
+mod output;
 
 static PERSON_ID_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^0*(\d{7,10})$").unwrap());
 static LCR_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^[A-Za-z0-9+/]{20,}={0,2}$").unwrap());
@@ -51,7 +55,7 @@ fn main() {
     let mut input = String::new();
     let mut trim_input: &str = "";
     let mut ask_for_input = true;
-
+    let mut output = Output::default();
     loop {
         if ask_for_input {
             log::info!(
@@ -64,14 +68,11 @@ fn main() {
 
             log::info!("Valor introducido: {}", input);
             trim_input = input.trim();
-            if trim_input.to_lowercase() == "q" {
-                log::info!("Salir");
-                break;
-            }
         }
         match trim_input {
             input if UUID_RE.is_match(input) => {
-                look_for_uuid(input);
+                (output, ask_for_input) = look_for_uuid(input, output);
+                log::info!("Final de flujo-> {:?}", output);
             }
             input if PERSON_ID_RE.is_match(input) => {
                 look_for_personid();
@@ -83,12 +84,19 @@ fn main() {
     }
 }
 
-fn look_for_uuid(input: &str) {
+fn look_for_uuid(input: &str, mut output: Output) -> (Output, bool) {
     // buscar involved party
-    let result =
-        api::productagreement::calls::by_invparty(input).unwrap_or_else(|_| String::from("NADA"));
-    if &result == "NADA" {
-        //Buscar por agreement
+    let response =
+        api::productagreement::calls::by_invparty(input).unwrap_or_else(|_| Response::Unknown());
+    match response {
+        Response::PARoot(p) => {
+            output.agreements = p.productAgreements.data;
+            (output, false)
+        }
+        _ => {
+            log::warn!("No se recuperan agreements");
+            (output, true)
+        }
     }
 }
 

@@ -11,25 +11,25 @@ pub enum Response {
 #[allow(non_snake_case)]
 #[allow(unused)]
 pub struct PARoot {
-    productAgreements: ProductAgreements,
+    pub productAgreements: ProductAgreements,
 }
 
 #[derive(Deserialize, Debug, Default, Clone)]
 #[allow(non_snake_case)]
 #[allow(unused)]
 pub struct ProductAgreements {
-    data: Vec<AgreementItem>,
+    pub data: Vec<AgreementItem>,
 }
 
 #[derive(Deserialize, Debug, Default, Clone)]
 #[allow(non_snake_case)]
 #[allow(unused)]
 pub struct AgreementItem {
-    lifeCycleStatusType: String,
-    productType: String,
-    name: String,
-    identifiers: Vec<Identifier>,
-    involvedPartyRelationships: InvolvedPartyRelationshipData,
+    pub lifeCycleStatusType: String,
+    pub productType: String,
+    pub name: String,
+    pub identifiers: Vec<Identifier>,
+    pub involvedPartyRelationships: InvolvedPartyRelationshipData,
 }
 
 #[derive(Deserialize, Debug, Default, Clone)]
