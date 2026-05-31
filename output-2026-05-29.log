@@ -1,0 +1,13 @@
+09:29:47 [INFO] Esto es una prueba
+14:18:55 [INFO] Inicio
+14:18:55 [INFO] Introducir valor (involved party, personId, dni, agreement, cid, local card reference
+14:28:41 [INFO] Inicio
+14:28:41 [INFO] Introducir valor (involved party, personId, dni, agreement, cid, local card reference, q -> salir)
+14:28:46 [INFO] Valor introducido: d
+14:28:46 [INFO] Introducir valor (involved party, personId, dni, agreement, cid, local card reference, q -> salir)
+14:28:48 [INFO] Valor introducido: hola
+14:28:48 [INFO] Introducir valor (involved party, personId, dni, agreement, cid, local card reference, q -> salir)
+14:28:50 [INFO] Valor introducido: que tal
+14:28:50 [INFO] Introducir valor (involved party, personId, dni, agreement, cid, local card reference, q -> salir)
+14:28:53 [INFO] Valor introducido: Q
+14:28:53 [INFO] Salir
